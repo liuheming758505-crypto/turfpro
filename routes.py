@@ -134,8 +134,30 @@ def advertise(): return render_template('advertise.html')
 @login_required
 def profile():
     if request.method=='POST':
-        current_user.phone=request.form.get('phone',''); current_user.company=request.form.get('company','')
-        db.session.commit(); flash('已更新','success')
+        action = request.form.get('action','info')
+        if action == 'info':
+            current_user.phone = request.form.get('phone','')
+            current_user.company = request.form.get('company','')
+            db.session.commit(); flash('信息已更新','success')
+        elif action == 'username':
+            new_username = request.form.get('username','').strip()
+            if not new_username: flash('用户名不能为空','error')
+            elif User.query.filter(User.username==new_username, User.id!=current_user.id).first():
+                flash('用户名已被占用','error')
+            else:
+                old_name = current_user.username
+                current_user.username = new_username
+                db.session.commit(); flash(f'用户名已从 {old_name} 改为 {new_username}','success')
+        elif action == 'password':
+            old_pw = request.form.get('current_password','')
+            new_pw = request.form.get('new_password','')
+            if not current_user.check_password(old_pw):
+                flash('当前密码错误','error')
+            elif len(new_pw) < 4:
+                flash('新密码至少4位','error')
+            else:
+                current_user.set_password(new_pw)
+                db.session.commit(); flash('密码已修改','success')
     return render_template('profile.html')
 
 # ==================== 病虫草害诊断库 ====================

@@ -1,26 +1,41 @@
 {% extends "base.html" %}{% block content %}
+<section style="background:#14171f"><div class="max-w-7xl mx-auto px-6 py-8"><div class="max-w-3xl"><div class="eyebrow mb-3" style="color:#3ab564"><span>●</span><span>PROFILE</span></div><h1 class="text-3xl font-extrabold text-white tracking-tight">个人中心</h1></div></div></section>
 
-<section style="background:#14171f">
-    <div class="max-w-7xl mx-auto px-6 py-20">
-        <div class="max-w-3xl reveal">
-            <div class="eyebrow mb-4" style="color:#3ab564"><span>●</span><span>PROFILE</span></div>
-            <h1 class="text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-5">个人中心</h1>
-            <p class="text-slate-400 text-base lg:text-lg max-w-xl leading-relaxed">管理你的账号与信息。</p>
-        </div>
-    </div>
-</section>
+<div class="max-w-3xl mx-auto px-6 py-6 space-y-6">
+  <!-- 基本信息 -->
+  <div class="card p-8">
+    <h2 class="font-bold text-lg mb-5">基本信息</h2>
+    <form method="POST" class="space-y-4">
+      <input type="hidden" name="action" value="info">
+      <div class="grid md:grid-cols-2 gap-4">
+        <div><label class="text-sm font-semibold text-gray-700 mb-1 block">邮箱</label><input value="{{ current_user.email }}" class="input bg-gray-50" disabled></div>
+        <div><label class="text-sm font-semibold text-gray-700 mb-1 block">手机号</label><input name="phone" value="{{ current_user.phone or '' }}" class="input" placeholder="选填"></div>
+        <div><label class="text-sm font-semibold text-gray-700 mb-1 block">单位名称</label><input name="company" value="{{ current_user.company or '' }}" class="input" placeholder="选填"></div>
+      </div>
+      <button type="submit" class="btn btn-ink">保存信息</button>
+    </form>
+  </div>
 
-<section class="max-w-3xl mx-auto px-4 py-8">
-    <div class="card p-8 reveal">
-        <form method="POST" class="space-y-3">
-            <div class="grid md:grid-cols-2 gap-4">
-                <div><label class="text-sm font-semibold text-gray-700 mb-1 block">用户名</label><input value="{{ current_user.username }}" class="input bg-gray-50" disabled></div>
-                <div><label class="text-sm font-semibold text-gray-700 mb-1 block">邮箱</label><input value="{{ current_user.email }}" class="input bg-gray-50" disabled></div>
-                <div><label class="text-sm font-semibold text-gray-700 mb-1 block">手机号</label><input name="phone" value="{{ current_user.phone or '' }}" class="input" placeholder="选填"></div>
-                <div><label class="text-sm font-semibold text-gray-700 mb-1 block">单位名称</label><input name="company" value="{{ current_user.company or '' }}" class="input" placeholder="选填"></div>
-            </div>
-            <button type="submit" class="btn btn-primary">保存修改</button>
-        </form>
-    </div>
-</section>
+  <!-- 改用户名 -->
+  <div class="card p-8">
+    <h2 class="font-bold text-lg mb-5">修改用户名</h2>
+    <form method="POST" class="space-y-4">
+      <input type="hidden" name="action" value="username">
+      <div><label class="text-sm font-semibold text-gray-700 mb-1 block">当前用户名</label><input value="{{ current_user.username }}" class="input bg-gray-50" disabled></div>
+      <div><label class="text-sm font-semibold text-gray-700 mb-1 block">新用户名</label><input name="username" value="{{ current_user.username }}" class="input" required placeholder="输入新用户名"></div>
+      <button type="submit" class="btn btn-ink">修改用户名</button>
+    </form>
+  </div>
+
+  <!-- 改密码 -->
+  <div class="card p-8">
+    <h2 class="font-bold text-lg mb-5">修改密码</h2>
+    <form method="POST" class="space-y-4">
+      <input type="hidden" name="action" value="password">
+      <div><label class="text-sm font-semibold text-gray-700 mb-1 block">当前密码</label><input type="password" name="current_password" class="input" required placeholder="输入当前密码"></div>
+      <div><label class="text-sm font-semibold text-gray-700 mb-1 block">新密码</label><input type="password" name="new_password" class="input" required placeholder="至少4位"></div>
+      <button type="submit" class="btn btn-ink">修改密码</button>
+    </form>
+  </div>
+</div>
 {% endblock %}
