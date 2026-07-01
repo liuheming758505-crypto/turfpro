@@ -1,4 +1,4 @@
-"""Full data models for TurfPro"""
+"""Full data models for XFieldMate"""
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -246,7 +246,7 @@ def seed_data():
     news = [
         ('2026年中国足球场草坪养护行业趋势报告','随着中超联赛职业化程度提升，运动场地草坪养护行业正迎来高速发展期。报告指出，2026年市场规模有望突破80亿元。','赵明义','中国草坪网'),
         ('FIFA Quality Pro认证标准更新：2026版解读','FIFA最新发布的场地认证标准在草坪密度、根系深度、排水速率等指标上提出了更高要求。','李振华','体育设施报'),
-        ('世界杯球场草坪技术深度解析','从2022卡塔尔世界杯到2026美加墨，球场草坪技术在应对极端气候方面取得了哪些突破？','王磊','TurfPro'),
+        ('世界杯球场草坪技术深度解析','从2022卡塔尔世界杯到2026美加墨，球场草坪技术在应对极端气候方面取得了哪些突破？','王磊','XFieldMate'),
         ('南方高尔夫球场夏季草坪养护要点','夏季高温高湿季节，暖季型草果岭如何保证推杆品质？专家分享实战经验。','陈思远','高尔夫周刊'),
         ('智慧灌溉：AI赋能草坪精准用水','基于土壤传感器和气象数据的智能灌溉系统，可节水30%以上，正在成为专业球场的标配。','周明','灌溉技术'),
     ]

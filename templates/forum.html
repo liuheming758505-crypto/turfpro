@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}论坛 - TurfPro{% endblock %}
+{% block title %}论坛 - XFieldMate{% endblock %}
 {% block content %}
 <section style="background:#14171f">
     <div class="max-w-7xl mx-auto px-6 py-20">
         <div class="max-w-3xl reveal">
             <div class="eyebrow mb-4" style="color:#3ab564"><span>●</span><span>COMMUNITY · {{ current_cat.name if current_cat else '全部讨论' }}</span></div>
             <h1 class="text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-5">
-                TurfPro <em class="not-italic text-gradient">技术社区</em>
+                XFieldMate <em class="not-italic text-gradient">技术社区</em>
             </h1>
             <p class="text-slate-400 text-base lg:text-lg max-w-xl leading-relaxed mb-8">
                 {{ current_cat.description if current_cat else '与全国草坪从业者交流养护技术、场地难题与实战经验。' }}

@@ -30,11 +30,11 @@ def load_settings():
         with open(SETTINGS_FILE, 'r') as f:
             return json.load(f)
     return {
-        'site_name': 'TurfPro',
+        'site_name': 'XFieldMate',
         'hero_title': '专业草坪养护平台',
         'hero_subtitle': '为中国草坪管理者打造的专业平台',
         'hero_image': 'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=1600',
-        'logo_text': 'TurfPro',
+        'logo_text': 'XFieldMate',
     }
 
 def save_settings(data):
@@ -58,11 +58,11 @@ def dashboard():
 def site_settings():
     settings = load_settings()
     if request.method == 'POST':
-        settings['site_name'] = request.form.get('site_name', 'TurfPro')
+        settings['site_name'] = request.form.get('site_name', 'XFieldMate')
         settings['hero_title'] = request.form.get('hero_title', '')
         settings['hero_subtitle'] = request.form.get('hero_subtitle', '')
         settings['hero_image'] = request.form.get('hero_image', '')
-        settings['logo_text'] = request.form.get('logo_text', 'TurfPro')
+        settings['logo_text'] = request.form.get('logo_text', 'XFieldMate')
         # Upload logo
         if 'logo_file' in request.files and request.files['logo_file'].filename:
             f = request.files['logo_file']
@@ -140,7 +140,7 @@ def edit_news(id=None):
         title = request.form.get('title', '').strip()
         content = request.form.get('content', '').strip()
         author = request.form.get('author', '编辑部')
-        source = request.form.get('source', 'TurfPro')
+        source = request.form.get('source', 'XFieldMate')
         image_url = request.form.get('image_url', '')
         if not title or not content:
             flash('标题和内容不能为空', 'error')
