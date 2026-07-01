@@ -32,5 +32,4 @@ def create_app():
 
     return app
 
-# if __name__ == '__main__':
-    create_app().run(host='0.0.0.0', port=5001, )
+# 部署用：Gunicorn 加载此模块后自动调用 create_app()
