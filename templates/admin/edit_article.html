@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block content %}
+<section style="background:#14171f"><div class="max-w-7xl mx-auto px-6 py-8"><div class="max-w-3xl"><a href="/admin/articles" class="font-mono text-[11px] text-slate-400 hover:text-white transition">← 返回文章列表</a><h1 class="text-3xl font-extrabold text-white tracking-tight mt-2">{{ '编辑文章' if item else '新建文章' }}</h1></div></div></section>
+<div class="max-w-4xl mx-auto px-6 py-6">
+  <form method="POST" class="card p-8 space-y-5">
+    <div><label class="text-sm font-semibold text-gray-700 mb-1.5 block">标题 *</label><input name="title" value="{{ item.title if item else '' }}" class="input" required placeholder="文章标题"></div>
+    <div><label class="text-sm font-semibold text-gray-700 mb-1.5 block">分类</label>
+      <select name="category_id" class="input">{% for c in categories %}<option value="{{ c.id }}" {% if item and item.category_id == c.id %}selected{% endif %}>{{ c.icon }} {{ c.name }}</option>{% endfor %}</select>
+    </div>
+    <div><label class="text-sm font-semibold text-gray-700 mb-1.5 block">内容 *</label><textarea name="content" rows="18" class="input" required placeholder="文章内容（支持HTML）">{{ item.content if item else '' }}</textarea></div>
+    <div class="flex gap-3"><button type="submit" class="btn btn-ink">{{ '保存修改' if item else '发布文章' }}</button><a href="/admin/articles" class="btn btn-outline">取消</a></div>
+  </form>
+</div>{% endblock %}
