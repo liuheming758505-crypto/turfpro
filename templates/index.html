@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- ===== HERO — Sanity-style ink split ===== -->
+<section class="bg-ink relative overflow-hidden" style="background:#14171f">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid lg:grid-cols-12 gap-8 items-center min-h-[80vh] py-16 lg:py-24">
+            <!-- Text col (7/12) -->
+            <div class="lg:col-span-7 reveal">
+                <div class="eyebrow mb-6" style="color:#3ab564">
+                    <span>●</span><span>CONTENT OPERATING SYSTEM · v4</span>
+                </div>
+                <h1 class="text-white font-extrabold leading-[1.02] tracking-tight mb-6" style="font-size:clamp(2.5rem,5vw,4.25rem)">
+                    The operating system<br>
+                    for <em class="not-italic text-gradient">content-driven</em><br>
+                    digital experiences
+                </h1>
+                <p class="text-slate-300 text-base lg:text-lg max-w-lg mb-8 leading-relaxed">
+                    TurfPro 是为中国草坪管理者打造的专业平台——把产品、技术、诊断、内容、社区统一在同一个系统里。
+                </p>
+                <div class="flex flex-wrap gap-3">
+                    <a href="/diagnose" class="btn btn-accent text-sm !px-6 !py-3">查看诊断库</a>
+                    <a href="/forum" class="btn text-sm !px-6 !py-3 bg-white/5 text-white border border-white/15 hover:bg-white/10">技术社区</a>
+                </div>
+                <p class="font-mono text-xs text-slate-500 mt-8">FREE PLAN · NO CREDIT CARD · 30K+ DEVELOPERS</p>
+            </div>
+            <!-- Visual col (5/12) — flat block, no rounded image -->
+            <div class="lg:col-span-5 reveal" style="transition-delay:.1s">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1459865264687-595d652de67e?w=900&h=1100&fit=crop&q=85&auto=format"
+                         class="w-full h-auto block" alt="" style="border-radius:3px;filter:contrast(1.05)">
+                    <!-- floating UI chip (Sanity-style evidence of product) -->
+                    <div class="hidden lg:block absolute -bottom-6 -left-6 bg-cream text-ink p-4 max-w-xs shadow-2xl" style="border-radius:3px">
+                        <p class="font-mono text-[10px] text-slate-500 mb-2">LIVE · 9 个诊断条目</p>
+                        <p class="text-sm font-semibold leading-snug">"腐霉枯萎病暴发怎么办？"</p>
+                        <p class="text-xs text-slate-500 mt-2">AI 1.2 秒给出方案</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== Trusted by (Sanity orange-bar → grass-green) ===== -->
+<section style="background:#028452">
+    <div class="max-w-7xl mx-auto px-6 py-5">
+        <div class="flex flex-wrap justify-between items-center gap-6 text-white">
+            <span class="font-mono text-[11px] tracking-wider uppercase opacity-80">Trusted by teams at</span>
+            <div class="flex flex-wrap gap-x-10 gap-y-2 font-bold tracking-tight opacity-90">
+                <span class="text-base">FIFA</span><span class="text-base">UEFA</span>
+                <span class="text-base">EPL</span><span class="text-base">中超</span>
+                <span class="text-base">亚足联</span><span class="text-base opacity-70">中国足协</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== Capabilities grid (3-up Sanity-style cards) ===== -->
+<section style="background:#fbfaf8">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+        <div class="max-w-2xl mb-12 reveal">
+            <div class="eyebrow mb-3"><span>●</span><span>CAPABILITIES</span></div>
+            <h2 class="text-3xl lg:text-4xl font-extrabold tracking-tight">一个平台，覆盖草坪养护全链路</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-4">
+            <a href="/diagnose" class="card p-7 reveal group" style="transition-delay:.05s">
+                <div class="eyebrow mb-4"><span>01</span><span>DIAGNOSE</span></div>
+                <h3 class="text-lg font-bold mb-2 group-hover:text-ink">病虫草害诊断库</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">对照症状识别病害/虫害/杂草，对症产品一键推荐。</p>
+                <p class="font-mono text-xs text-ink mt-5 group-hover:underline">进入诊断 →</p>
+            </a>
+            <a href="/magazine" class="card p-7 reveal group" style="transition-delay:.1s">
+                <div class="eyebrow mb-4"><span>02</span><span>MAGAZINE</span></div>
+                <h3 class="text-lg font-bold mb-2 group-hover:text-ink">技术杂志</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">打孔通气、施肥平衡、土壤检测——专家一线长文。</p>
+                <p class="font-mono text-xs text-ink mt-5 group-hover:underline">阅读文章 →</p>
+            </a>
+            <a href="/forum" class="card p-7 reveal group" style="transition-delay:.15s">
+                <div class="eyebrow mb-4"><span>03</span><span>COMMUNITY</span></div>
+                <h3 class="text-lg font-bold mb-2 group-hover:text-ink">技术社区</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">与全国草坪从业者交流养护难题与实战经验。</p>
+                <p class="font-mono text-xs text-ink mt-5 group-hover:underline">进入社区 →</p>
+            </a>
+            <a href="/ai-assistant" class="card p-7 reveal group" style="transition-delay:.2s">
+                <div class="eyebrow mb-4"><span>04</span><span>AI ASSISTANT</span></div>
+                <h3 class="text-lg font-bold mb-2 group-hover:text-ink">AI 专家问诊</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">描述症状，AI 助手基于专业知识库给出诊断与建议。</p>
+                <p class="font-mono text-xs text-ink mt-5 group-hover:underline">立即问诊 →</p>
+            </a>
+            <a href="/tools" class="card p-7 reveal group" style="transition-delay:.25s">
+                <div class="eyebrow mb-4"><span>05</span><span>TOOLS</span></div>
+                <h3 class="text-lg font-bold mb-2 group-hover:text-ink">工具箱</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">播种量计算器、施肥计算器、灌溉指南——精准养护。</p>
+                <p class="font-mono text-xs text-ink mt-5 group-hover:underline">使用工具 →</p>
+            </a>
+            <a href="/news" class="card p-7 reveal group" style="transition-delay:.3s">
+                <div class="eyebrow mb-4"><span>06</span><span>NEWS</span></div>
+                <h3 class="text-lg font-bold mb-2 group-hover:text-ink">行业资讯</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">草坪养护行业最新动态、技术前沿与政策解读。</p>
+                <p class="font-mono text-xs text-ink mt-5 group-hover:underline">浏览资讯 →</p>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== Stats strip (single bold number row, Sanity-style) ===== -->
+<section style="background:#14171f">
+    <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 reveal">
+        <div><div class="font-mono text-[11px] text-slate-500 uppercase tracking-widest mb-2">Venues served</div><div class="text-4xl font-extrabold text-white">500<span class="text-gradient">+</span></div></div>
+        <div><div class="font-mono text-[11px] text-slate-500 uppercase tracking-widest mb-2">Diagnostic entries</div><div class="text-4xl font-extrabold text-white">9</div></div>
+        <div><div class="font-mono text-[11px] text-slate-500 uppercase tracking-widest mb-2">Community posts</div><div class="text-4xl font-extrabold text-white">6</div></div>
+        <div><div class="font-mono text-[11px] text-slate-500 uppercase tracking-widest mb-2">AI availability</div><div class="text-4xl font-extrabold text-white">24<span class="text-slate-500">/</span>7</div></div>
+    </div>
+</section>
+
+<!-- ===== Articles + News (2-col, dense, Sanity blog list style) ===== -->
+<section style="background:#fbfaf8">
+    <div class="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-16">
+        <div>
+            <div class="flex items-end justify-between mb-8 reveal">
+                <div>
+                    <div class="eyebrow mb-2"><span>●</span><span>JOURNAL</span></div>
+                    <h2 class="text-2xl lg:text-3xl font-extrabold tracking-tight">技术文章</h2>
+                </div>
+                <a href="/magazine" class="font-mono text-xs text-ink hover:underline">ALL →</a>
+            </div>
+            <div class="divide-y" style="border-color:var(--line)">
+                {% set acovers = ['1500382017468-9049fed747ef','1416879595882-3373a0480b5b','1622383563227-04401ab4e5ea'] %}
+                {% for a in articles[:4] %}
+                <a href="/post/{{ a.id }}" class="flex gap-4 py-5 group reveal">
+                    <div class="w-20 h-20 bg-cream overflow-hidden shrink-0"><img src="https://images.unsplash.com/photo-{{ acovers[loop.index0 % acovers|length] }}?w=160&h=160&fit=crop&q=70&auto=format" class="w-full h-full object-cover"></div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-bold text-ink leading-snug group-hover:underline line-clamp-2">{{ a.title }}</h3>
+                        <p class="font-mono text-[11px] text-slate-500 mt-1.5">{{ a.author.username if a.author else '编辑部' }} · {{ (a.content|truncate(45)) }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div>
+            <div class="flex items-end justify-between mb-8 reveal">
+                <div>
+                    <div class="eyebrow mb-2"><span>●</span><span>NEWS</span></div>
+                    <h2 class="text-2xl lg:text-3xl font-extrabold tracking-tight">行业资讯</h2>
+                </div>
+                <a href="/news" class="font-mono text-xs text-ink hover:underline">ALL →</a>
+            </div>
+            <div class="divide-y" style="border-color:var(--line)">
+                {% for n in news[:4] %}
+                <a href="/news/{{ n.slug }}" class="block py-5 group reveal">
+                    <p class="font-mono text-[10px] text-slate-500 uppercase tracking-wider mb-1">{{ n.source }} · {{ n.published_at.strftime('%Y-%m-%d') if n.published_at else '' }}</p>
+                    <h3 class="font-bold text-ink leading-snug group-hover:underline">{{ n.title }}</h3>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== AI CTA (full-bleed ink with mono eyebrow) ===== -->
+<section style="background:#14171f">
+    <div class="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
+        <div class="reveal">
+            <div class="eyebrow mb-4" style="color:#3ab564"><span>●</span><span>AI ASSISTANT · BETA</span></div>
+            <h2 class="text-3xl lg:text-4xl font-extrabold text-white tracking-tight mb-4">草坪出问题了？<br>问 AI 专家</h2>
+            <p class="text-slate-400 leading-relaxed mb-6">描述症状，AI 助手基于专业知识库给出诊断、防治建议与产品推荐。</p>
+            <a href="/ai-assistant" class="btn btn-accent text-sm !px-6 !py-3">立即问诊 →</a>
+        </div>
+        <div class="reveal" style="transition-delay:.1s">
+            <div class="bg-cream p-6" style="border-radius:3px">
+                <p class="font-mono text-[11px] text-slate-500 mb-3">USER · 2026.06.28</p>
+                <p class="text-sm text-ink mb-4 leading-relaxed">"梅雨季足球场出现直径 30cm 的褐色斑块，清晨边缘有灰白色菌丝环，是什么病？怎么治？"</p>
+                <div class="border-t pt-4" style="border-color:var(--line)">
+                    <p class="font-mono text-[11px] text-accent-green mb-2" style="color:#3ab564">AI · 0.8s</p>
+                    <p class="text-sm text-ink leading-relaxed">高度疑似<strong>褐斑病</strong>。建议立即：①停傍晚浇水改清晨；②喷施嘧菌酯 7-10 天 1 次连 2 次；③打孔通气。</p>
+                    <a href="/diagnose/brown-patch" class="font-mono text-xs text-ink mt-3 inline-block hover:underline">查看完整防治方案 →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== Final CTA strip ===== -->
+<section style="background:#3ab564">
+    <div class="max-w-7xl mx-auto px-6 py-10 flex flex-wrap items-center justify-between gap-4 text-white">
+        <div>
+            <p class="font-mono text-[11px] uppercase tracking-wider opacity-80 mb-1">GET STARTED</p>
+            <p class="text-2xl font-extrabold">开始为你的场地选最佳方案</p>
+        </div>
+        <a href="/diagnose" class="btn text-sm !px-6 !py-3 bg-ink text-white hover:bg-black">查看诊断库 →</a>
+    </div>
+</section>
+
+<!-- ===== Floating AI (bottom-right, square) ===== -->
+<a href="/ai-assistant" class="fixed bottom-5 right-5 z-40 bg-ink text-white px-4 py-3 text-sm font-semibold flex items-center gap-2 shadow-2xl hover:bg-black transition" style="border-radius:3px">
+    <span>🤖</span><span class="font-mono text-xs">AI</span>
+</a>
+{% endblock %}

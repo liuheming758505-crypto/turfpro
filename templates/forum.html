@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}论坛 - TurfPro{% endblock %}
+{% block content %}
+<section style="background:#14171f">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+        <div class="max-w-3xl reveal">
+            <div class="eyebrow mb-4" style="color:#3ab564"><span>●</span><span>COMMUNITY · {{ current_cat.name if current_cat else '全部讨论' }}</span></div>
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-5">
+                TurfPro <em class="not-italic text-gradient">技术社区</em>
+            </h1>
+            <p class="text-slate-400 text-base lg:text-lg max-w-xl leading-relaxed mb-8">
+                {{ current_cat.description if current_cat else '与全国草坪从业者交流养护技术、场地难题与实战经验。' }}
+            </p>
+            <a href="/post/new" class="btn btn-accent text-sm !px-6 !py-3">＋ 发起讨论</a>
+        </div>
+    </div>
+</section>
+<div>
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="flex flex-wrap gap-2 mb-4">
+            <a href="/forum" class="px-4 py-2 text-xs font-mono font-medium {% if not current_cat %}bg-ink text-white{% else %}bg-white text-slate-600 border hover:border-ink{% endif %}" style="border-radius:3px">全部</a>
+            {% for cat in categories %}
+            <a href="/forum?category={{ cat.slug }}" class="px-4 py-2 text-xs font-mono font-medium {% if current_cat and current_cat.id == cat.id %}bg-ink text-white{% else %}bg-white text-slate-600 border hover:border-ink{% endif %}" style="border-radius:3px">{{ cat.icon }} {{ cat.name }}</a>
+            {% endfor %}
+        </div>
+        <div class="flex justify-between items-center mb-3">
+            <p class="text-gray-500">{{ posts|length }} 个帖子</p>
+            <div class="flex space-x-2">
+                <a href="?sort=latest&category={{ current_cat.slug if current_cat else '' }}" class="px-3 py-1 text-sm rounded-full {% if sort == 'latest' or not sort %}bg-gray-800 text-white{% else %}bg-gray-100 text-gray-600{% endif %}">最新</a>
+                <a href="?sort=popular&category={{ current_cat.slug if current_cat else '' }}" class="px-3 py-1 text-sm rounded-full {% if sort == 'popular' %}bg-gray-800 text-white{% else %}bg-gray-100 text-gray-600{% endif %}">热门</a>
+            </div>
+        </div>
+        <div class="space-y-4">
+            {% for post in posts %}
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 card-hover">
+                <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span class="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full font-medium">{{ post.category.icon }} {{ post.category.name }}</span>
+                            {% if post.is_pinned %}<span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">置顶</span>{% endif %}
+                        </div>
+                        <a href="/post/{{ post.id }}" class="text-xl font-bold text-gray-900 hover:text-green-600 mb-2 block">{{ post.title }}</a>
+                        <p class="text-gray-500 mb-3">{{ post.content[:150] }}{% if post.content|length > 150 %}...{% endif %}</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4 text-sm text-gray-400 border-t border-gray-50 pt-3">
+                    <span>{{ post.author.username }}</span>
+                    <span>{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                    <span>👁️ {{ post.views }}</span>
+                    <span>💬 {{ post.replies|length }}</span>
+                </div>
+            </div>
+            {% else %}
+            <div class="text-center py-8 text-gray-400">
+                <p class="text-5xl mb-4">📋</p>
+                <p class="text-lg">这个版块还没有帖子</p>
+                <a href="/post/new" class="text-green-600 font-medium mt-2 inline-block">发布第一条 →</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}{{ problem.name }} - 草坪诊断库 - TurfPro{% endblock %}
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-10">
+    <!-- 面包屑 -->
+    <nav class="text-sm text-gray-400 mb-3">
+        <a href="/diagnose" class="hover:text-emerald-600">诊断库</a>
+        <span class="mx-2">/</span>
+        <a href="/diagnose?type={{ problem.ptype }}" class="hover:text-emerald-600">
+            {% if problem.ptype=='disease' %}病害{% elif problem.ptype=='pest' %}虫害{% else %}杂草{% endif %}
+        </a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-600">{{ problem.name }}</span>
+    </nav>
+
+    <!-- 标题区 -->
+    <div class="card p-8 mb-4">
+        <div class="flex flex-wrap items-center gap-3 mb-4">
+            <span class="badge {% if problem.ptype=='disease' %}bg-rose-50 text-rose-600{% elif problem.ptype=='pest' %}bg-amber-50 text-amber-600{% else %}bg-emerald-50 text-emerald-600{% endif %}">
+                {% if problem.ptype=='disease' %}🦠 病害{% elif problem.ptype=='pest' %}🐛 虫害{% else %}🌿 杂草{% endif %}
+            </span>
+            <span class="badge {% if problem.severity=='高' %}bg-red-100 text-red-600{% elif problem.severity=='中' %}bg-orange-100 text-orange-600{% else %}bg-gray-100 text-gray-500{% endif %}">危害等级 {{ problem.severity }}</span>
+            <span class="badge bg-sky-50 text-sky-600">🗓 {{ problem.season }}</span>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">{{ problem.name }}</h1>
+        {% if problem.latin_name %}<p class="text-gray-400 italic font-mono mt-1">{{ problem.latin_name }}</p>{% endif %}
+        <p class="text-gray-600 leading-relaxed mt-4 text-lg">{{ problem.summary }}</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-4">
+        <!-- 主内容 -->
+        <div class="md:col-span-2 space-y-4">
+            <div class="card p-7">
+                <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900 mb-3"><span class="text-emerald-600">🔍</span> 症状识别</h2>
+                <p class="text-gray-600 leading-relaxed">{{ problem.symptoms }}</p>
+            </div>
+            <div class="card p-7">
+                <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900 mb-3"><span class="text-emerald-600">🌡</span> 发生条件</h2>
+                <p class="text-gray-600 leading-relaxed">{{ problem.conditions }}</p>
+            </div>
+            <div class="card p-7 border-l-4 border-emerald-500">
+                <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900 mb-3"><span class="text-emerald-600">💊</span> 防治方案</h2>
+                <p class="text-gray-600 leading-relaxed whitespace-pre-line">{{ problem.solution }}</p>
+            </div>
+            <div class="card p-7">
+                <h2 class="flex items-center gap-2 text-lg font-bold text-gray-900 mb-3"><span class="text-emerald-600">🛡</span> 预防措施</h2>
+                <p class="text-gray-600 leading-relaxed">{{ problem.prevention }}</p>
+            </div>
+        </div>
+
+        <!-- 侧栏 -->
+        <div class="space-y-3">
+            {% if recommended %}
+            <div class="card p-6">
+                <h3 class="text-sm font-bold text-gray-900 mb-4 tracking-wide uppercase">🛒 推荐防治产品</h3>
+                <div class="space-y-4">
+                    {% for prod in recommended %}
+                    <a href="/products/{{ prod.slug }}" class="flex items-center gap-3 group">
+                        <img src="{{ prod.image_url }}" class="w-14 h-14 rounded-lg object-cover bg-gray-100" alt="{{ prod.name }}">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-semibold text-gray-800 truncate group-hover:text-emerald-600">{{ prod.name }}</p>
+                            <p class="text-xs text-emerald-600 font-bold">{% if prod.price %}¥{{ '%.0f'|format(prod.price) }}{% else %}询价{% endif %}</p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                <a href="/products" class="block text-center text-xs text-emerald-600 font-semibold mt-4 hover:underline">查看全部产品 →</a>
+            </div>
+            {% endif %}
+
+            <div class="card p-6 bg-slate-900 text-white">
+                <h3 class="text-sm font-bold mb-2">🤖 拿不准？问 AI 专家</h3>
+                <p class="text-xs text-gray-400 mb-4 leading-relaxed">描述你的草坪症状，AI 助手帮你进一步诊断。</p>
+                <a href="/ai-assistant" class="btn btn-primary w-full justify-center">AI 问诊 →</a>
+            </div>
+
+            {% if related %}
+            <div class="card p-6">
+                <h3 class="text-sm font-bold text-gray-900 mb-4 tracking-wide uppercase">相关条目</h3>
+                <div class="space-y-2">
+                    {% for r in related %}
+                    <a href="/diagnose/{{ r.slug }}" class="block text-sm text-gray-600 hover:text-emerald-600 py-1">· {{ r.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

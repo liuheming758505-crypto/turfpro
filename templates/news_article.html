@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block content %}
+<section class="hero-animated min-h-[32vh] flex items-center dot-grid"><div class="max-w-6xl mx-auto px-4 text-white"><div class="section-label reveal" style="color:#34d399">NEWS · 行业资讯</div><h1 class="text-5xl font-extrabold tracking-tight mb-4 reveal">{{ article.title|truncate(30) }}</h1></div></section>
+<div class="max-w-3xl mx-auto px-4 py-6 reveal">
+    <nav class="text-sm text-gray-400 mb-3"><a href="/" class="hover:text-emerald-600">首页</a> / <a href="/news" class="hover:text-emerald-600">行业资讯</a> / <span class="text-gray-600">{{ article.title|truncate(25) }}</span></nav>
+    <article class="card p-8">
+        <span class="badge bg-emerald-100 text-emerald-800 mb-3">行业资讯</span>
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-4">{{ article.title }}</h1>
+        <div class="flex flex-wrap gap-4 text-sm text-gray-400 mb-4 pb-6 border-b border-gray-100">
+            <span>✍️ {{ article.author }}</span><span>📰 {{ article.source }}</span><span>📅 {{ article.published_at.strftime('%Y-%m-%d') if article.published_at else '' }}</span>
+        </div>
+        <img src="{{ article.image_url }}" class="w-full h-64 object-cover rounded-xl mb-4" alt="">
+        <div class="text-gray-600 leading-relaxed">{{ article.content }}</div>
+    </article>
+    <a href="/news" class="inline-flex items-center text-sm text-emerald-600 font-semibold mt-6 hover:underline">← 返回资讯列表</a>
+</div>
+{% endblock %}

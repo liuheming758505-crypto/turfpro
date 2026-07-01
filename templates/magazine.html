@@ -1,0 +1,37 @@
+{% extends "base.html" %}{% block content %}
+
+<section style="background:#14171f">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+        <div class="max-w-3xl reveal">
+            <div class="eyebrow mb-4" style="color:#3ab564"><span>●</span><span>JOURNAL</span></div>
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-5">技术杂志</h1>
+            <p class="text-slate-400 text-base lg:text-lg max-w-xl leading-relaxed">深度技术长文 · 实战案例 · 行业专家的一线经验。</p>
+        </div>
+    </div>
+</section>
+
+<section class="max-w-6xl mx-auto px-4 py-8">
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
+        {% set covers = ['1500382017468-9049fed747ef','1416879595882-3373a0480b5b','1622383563227-04401ab4e5ea','1530549387789-4c1017266635','1587174486073-ae5e5cff23aa','1565011523534-747a8601f10a'] %}
+        {% for a in articles %}
+        <a href="/post/{{ a.id }}" class="card tilt-card relative overflow-hidden reveal group">
+            <div class="relative h-52 overflow-hidden bg-gray-100">
+                <img src="https://images.unsplash.com/photo-{{ covers[loop.index0 % covers|length] }}?w=600&h=400&fit=crop&q=75&auto=format" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                <span class="absolute top-4 left-4 badge bg-emerald-600 text-white">{{ a.category.name if a.category else '技术' }}</span>
+            </div>
+            <div class="p-6">
+                <h3 class="font-bold text-lg text-gray-900 group-hover:text-emerald-600 mb-2 leading-snug">{{ a.title }}</h3>
+                <p class="text-sm text-gray-500 leading-relaxed mb-4">{{ a.content|truncate(90) }}</p>
+                <div class="flex items-center justify-between text-xs text-gray-400 border-t border-gray-50 pt-3">
+                    <span>✍️ {{ a.author.username if a.author else '编辑部' }}</span>
+                    <span>👁️ {{ a.views }} · 阅读全文 →</span>
+                </div>
+            </div>
+        </a>
+        {% else %}
+        <div class="col-span-full text-center py-8 text-gray-400"><p class="text-5xl mb-4">📖</p><p>暂无文章</p></div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

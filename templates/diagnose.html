@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}病虫草害诊断库 - TurfPro{% endblock %}
+{% block content %}
+<!-- Hero -->
+<section style="background:#14171f">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+        <div class="max-w-3xl reveal">
+            <div class="eyebrow mb-4" style="color:#3ab564"><span>●</span><span>DIAGNOSTICS</span></div>
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-5">
+                识别每一处<em class="not-italic text-gradient">病害</em>
+            </h1>
+            <p class="text-slate-400 text-base lg:text-lg max-w-xl leading-relaxed mb-8">
+                对照症状快速识别草坪病害、虫害与杂草，获取专业防治方案与对症产品。
+            </p>
+            <form action="/diagnose" method="get" class="max-w-lg flex gap-2">
+                {% if current_type %}<input type="hidden" name="type" value="{{ current_type }}">{% endif %}
+                <input name="q" value="{{ q or '' }}" placeholder="输入症状或名称，如：枯黄斑块、菌丝、马唐…"
+                       class="input bg-white/5 border-white/15 text-white placeholder-slate-500 flex-1">
+                <button class="btn btn-accent">搜索</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<div class="max-w-6xl mx-auto px-4 py-6">
+    <!-- 分类筛选 -->
+    <div class="flex flex-wrap gap-3 mb-5 justify-center">
+        <a href="/diagnose" class="px-5 py-2.5 rounded-full text-sm font-semibold transition {% if not current_type %}bg-emerald-600 text-white shadow-lg shadow-emerald-600/20{% else %}bg-white text-gray-600 border border-gray-200 hover:border-emerald-500{% endif %}">全部 · {{ counts.all }}</a>
+        <a href="/diagnose?type=disease" class="px-5 py-2.5 rounded-full text-sm font-semibold transition {% if current_type=='disease' %}bg-emerald-600 text-white shadow-lg shadow-emerald-600/20{% else %}bg-white text-gray-600 border border-gray-200 hover:border-emerald-500{% endif %}">🦠 病害 · {{ counts.disease }}</a>
+        <a href="/diagnose?type=pest" class="px-5 py-2.5 rounded-full text-sm font-semibold transition {% if current_type=='pest' %}bg-emerald-600 text-white shadow-lg shadow-emerald-600/20{% else %}bg-white text-gray-600 border border-gray-200 hover:border-emerald-500{% endif %}">🐛 虫害 · {{ counts.pest }}</a>
+        <a href="/diagnose?type=weed" class="px-5 py-2.5 rounded-full text-sm font-semibold transition {% if current_type=='weed' %}bg-emerald-600 text-white shadow-lg shadow-emerald-600/20{% else %}bg-white text-gray-600 border border-gray-200 hover:border-emerald-500{% endif %}">🌿 杂草 · {{ counts.weed }}</a>
+    </div>
+
+    <!-- 卡片网格 -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for p in problems %}
+        <a href="/diagnose/{{ p.slug }}" class="card tilt-card relative overflow-hidden reveal block">
+            <div class="relative h-40 overflow-hidden bg-gray-100">
+                <img src="{{ p.image_url }}" class="w-full h-full object-cover" alt="{{ p.name }}">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                <span class="absolute top-3 left-3 badge {% if p.ptype=='disease' %}bg-rose-500 text-white{% elif p.ptype=='pest' %}bg-amber-500 text-white{% else %}bg-emerald-500 text-white{% endif %}">
+                    {% if p.ptype=='disease' %}🦠 病害{% elif p.ptype=='pest' %}🐛 虫害{% else %}🌿 杂草{% endif %}
+                </span>
+                <span class="absolute top-3 right-3 badge {% if p.severity=='高' %}bg-red-600 text-white{% elif p.severity=='中' %}bg-orange-500 text-white{% else %}bg-gray-700 text-white{% endif %}">危害 {{ p.severity }}</span>
+            </div>
+            <div class="p-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-1">{{ p.name }}</h3>
+                {% if p.latin_name %}<p class="text-xs text-gray-400 italic font-mono mb-3">{{ p.latin_name }}</p>{% endif %}
+                <p class="text-sm text-gray-500 leading-relaxed mb-4">{{ p.summary }}</p>
+                <div class="flex items-center justify-between text-xs text-gray-400 border-t border-gray-50 pt-3">
+                    <span>🗓 高发：{{ p.season }}</span>
+                    <span class="text-emerald-600 font-semibold">查看防治 →</span>
+                </div>
+            </div>
+        </a>
+        {% else %}
+        <div class="col-span-full text-center py-8 text-gray-400">
+            <p class="text-5xl mb-4">🔍</p>
+            <p>没有匹配的结果，换个关键词试试</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

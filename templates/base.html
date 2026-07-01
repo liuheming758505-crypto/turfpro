@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TurfPro — 中国专业运动场地草坪养护平台。产品、技术、资讯一站式服务。">
+    <title>{% block title %}TurfPro — 专业草坪养护{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: { extend: {
+          colors: {
+            ink: '#14171f', sand: '#f3f1ee', cream: '#fbfaf8',
+            grass: { DEFAULT:'#1f6b3b', 600:'#1f6b3b', 700:'#185530', 500:'#2f8a4f' },
+            accent: { green:'#3ab564', blue:'#3274ff', orange:'#ba5f1e', yellow:'#f7d455' },
+          },
+          fontFamily: { sans:['Inter','"Noto Sans SC"','system-ui','sans-serif'], mono:['"IBM Plex Mono"','monospace'] },
+          borderRadius: { DEFAULT:'3px', sm:'2px', md:'4px', lg:'6px' },
+        }}
+      }
+    </script>
+    <style>
+        :root {
+            --ink: #14171f;        /* Sanity body ink */
+            --grass: #1f6b3b;      /* brand deep green */
+            --grass-700: #185530;
+            --accent: #3ab564;     /* Sanity green */
+            --sand: #f3f1ee;       /* warm off-white panel */
+            --cream: #fbfaf8;
+            --line: #e4e2dd;       /* warm hairline */
+            --r: 3px;              /* Sanity base radius — near-square */
+        }
+        * { border-color: var(--line); }
+        body { font-family: 'Inter','Noto Sans SC', system-ui, sans-serif; font-weight: 400; color: var(--ink); -webkit-font-smoothing: antialiased; }
+        h1,h2,h3,h4 { font-family: 'Inter','Noto Sans SC', system-ui, sans-serif; font-weight: 700; letter-spacing: -0.02em; }
+        .font-mono { font-family: 'IBM Plex Mono', monospace; }
+
+        /* mono uppercase eyebrow — Sanity signature label */
+        .eyebrow {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: .72rem; font-weight: 500;
+            letter-spacing: .08em; text-transform: uppercase;
+            color: var(--accent); display: inline-flex; align-items: center; gap: .5rem;
+        }
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: .72rem; font-weight: 500;
+            letter-spacing: .08em; text-transform: uppercase;
+            color: var(--accent); display: flex; align-items: center; gap: .5rem; margin-bottom: .6rem;
+        }
+        .section-label.justify-center { justify-content: center; }
+        .section-label::before { content: ''; width: 1.25rem; height: 1px; background: var(--accent); }
+        .section-label.justify-center::before { display:none; }
+
+        .dot-grid { background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 28px 28px; }
+
+        /* flat ink hero — no animated gradient (Sanity is crisp, not flashy) */
+        .hero-animated { background: #14171f; }
+        .hero-ink { background: #14171f; }
+
+        /* text accent — Sanity uses SOLID color, not gradient */
+        .text-gradient { color: var(--accent); -webkit-text-fill-color: var(--accent); }
+
+        .reveal { opacity: 0; transform: translateY(16px); transition: .5s cubic-bezier(.22,1,.36,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        .glass { background: rgba(255,255,255,.06); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.1); }
+
+        /* card — square corners, hairline border, NO lift/glow (Sanity is flat) */
+        .card { background:#fff; border-radius: var(--r); border:1px solid var(--line); transition: border-color .2s, box-shadow .2s; }
+        .card:hover { border-color:#c9c6bf; box-shadow: 0 1px 0 #00000008; }
+        .tilt-card { transition: border-color .2s, box-shadow .2s; }
+        .tilt-card:hover { border-color:#c9c6bf; box-shadow: 0 6px 24px rgba(20,23,31,.06); }
+
+        /* buttons — square, flat, confident */
+        .btn { display:inline-flex; align-items:center; justify-content:center; gap:.4rem;
+               padding:.6rem 1.15rem; border-radius: var(--r); font-weight:600; font-size:.85rem;
+               line-height:1; transition: background .18s, color .18s, border-color .18s; }
+        .btn-primary { background: var(--ink); color:#fff; }
+        .btn-primary:hover { background:#000; }
+        .btn-accent { background: var(--accent); color:#06230f; }
+        .btn-accent:hover { background:#2fa257; }
+        .btn-outline { border:1px solid var(--ink); color: var(--ink); background:transparent; }
+        .btn-outline:hover { background: var(--ink); color:#fff; }
+
+        .input { border:1px solid var(--line); border-radius: var(--r); padding:.6rem .85rem; width:100%; background:#fff; transition:.15s; font-size:.9rem; }
+        .input:focus { border-color: var(--ink); outline:none; box-shadow:0 0 0 2px rgba(20,23,31,.08); }
+
+        .badge { display:inline-flex; align-items:center; padding:.18rem .55rem; font-size:.68rem; font-weight:600;
+                 border-radius: var(--r); letter-spacing:.02em; font-family:'IBM Plex Mono',monospace; }
+
+        .nav-glass { background: rgba(251,250,248,.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom:1px solid var(--line); }
+
+        html { scroll-behavior: smooth; }
+        @keyframes geoPulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+    </style>
+</head>
+<body class="text-ink antialiased" style="background:#fbfaf8">
+    <!-- Nav -->
+    <nav class="nav-glass sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-center h-14">
+                <a href="/" class="flex items-center gap-2">
+                    <span class="inline-flex items-center justify-center w-6 h-6 bg-ink text-white text-xs font-bold" style="border-radius:3px">T</span>
+                    <span class="font-bold text-base tracking-tight">TurfPro</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/" class="text-[13px] font-medium text-slate-600 hover:text-ink">首页</a>
+                    <a href="/diagnose" class="text-[13px] font-medium text-slate-600 hover:text-ink">诊断库</a>
+                    <a href="/magazine" class="text-[13px] font-medium text-slate-600 hover:text-ink">杂志</a>
+                    <a href="/forum" class="text-[13px] font-medium text-slate-600 hover:text-ink">社区</a>
+                    <a href="/news" class="text-[13px] font-medium text-slate-600 hover:text-ink">资讯</a>
+                    <a href="/tools" class="text-[13px] font-medium text-slate-600 hover:text-ink">工具</a>
+                    <a href="/ai-assistant" class="text-[13px] font-medium text-slate-600 hover:text-ink">AI</a>
+                    <span class="w-px h-4 bg-slate-200"></span>
+                    {% if current_user.is_authenticated %}
+                    <a href="/profile" class="text-[13px] font-semibold text-ink">{{ current_user.username }}</a>
+                    <a href="/logout" class="text-[13px] font-medium text-slate-400 hover:text-red-500">退出</a>
+                    {% else %}
+                    <a href="/login" class="text-[13px] font-medium text-slate-600 hover:text-ink">登录</a>
+                    <a href="/register" class="text-[13px] font-semibold text-white bg-ink px-3 py-1.5" style="border-radius:3px">注册</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}
+    <div class="fixed top-20 left-1/2 -translate-x-1/2 z-50 space-y-2">
+        {% for cat, msg in messages %}
+        <div class="px-5 py-2.5 shadow-lg text-white text-sm font-medium {% if cat=='error' %}bg-red-500{% else %}bg-ink{% endif %}" style="border-radius:3px">{{ msg }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}{% endwith %}
+
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-gray-500 pt-20 pb-10">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid md:grid-cols-5 gap-12 mb-16">
+                <div class="md:col-span-2">
+                    <span class="text-white text-xl font-bold">🌱 TurfPro</span>
+                    <p class="mt-4 text-sm leading-relaxed">中国专业运动场地草坪养护平台。<br>为球场管理者和草坪从业者提供<br>产品、技术、资讯一站式服务。</p>
+                </div>
+                <div style="display:none"><h4 class="text-gray-400 text-xs font-semibold tracking-wider uppercase mb-5">产品</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="/products?subcat=seed" class="hover:text-white transition">草坪草种</a></li>
+                        <li><a href="/products?subcat=fertilizer" class="hover:text-white transition">肥料与土壤</a></li>
+                        <li><a href="/products?subcat=equipment" class="hover:text-white transition">设备与机具</a></li>
+                        <li><a href="/products" class="text-emerald-400 hover:text-emerald-300 text-xs">全部产品 →</a></li>
+                </ul></div>
+                <div><h4 class="text-gray-400 text-xs font-semibold tracking-wider uppercase mb-5">资源</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="/diagnose" class="hover:text-white transition">病虫草害诊断库</a></li>
+                        <li><a href="/tools" class="hover:text-white transition">工具箱</a></li>
+                        <li><a href="/ai-assistant" class="hover:text-white transition">AI 问诊</a></li>
+                        <li><a href="/news" class="hover:text-white transition">行业资讯</a></li>
+                        <li><a href="/magazine" class="hover:text-white transition">技术杂志</a></li>
+                </ul></div>
+                <div><h4 class="text-gray-400 text-xs font-semibold tracking-wider uppercase mb-5">关于</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="/about" class="hover:text-white transition">关于我们</a></li>
+                        <li><a href="/contact" class="hover:text-white transition">联系我们</a></li>
+                        <li><a href="/advertise" class="hover:text-white transition">广告合作</a></li>
+                        <li><a href="/jobs" class="hover:text-white transition">招聘</a></li>
+                </ul></div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 text-center text-xs text-slate-600">
+                © {{ current_year }} TurfPro · All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Scroll reveal — subtle fade up, the only motion (Sanity-style restraint)
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+            }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        });
+    </script>
+</body>
+</html>

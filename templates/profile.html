@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% block content %}
+
+<section style="background:#14171f">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+        <div class="max-w-3xl reveal">
+            <div class="eyebrow mb-4" style="color:#3ab564"><span>●</span><span>PROFILE</span></div>
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-5">个人中心</h1>
+            <p class="text-slate-400 text-base lg:text-lg max-w-xl leading-relaxed">管理你的账号与信息。</p>
+        </div>
+    </div>
+</section>
+
+<section class="max-w-3xl mx-auto px-4 py-8">
+    <div class="card p-8 reveal">
+        <form method="POST" class="space-y-3">
+            <div class="grid md:grid-cols-2 gap-4">
+                <div><label class="text-sm font-semibold text-gray-700 mb-1 block">用户名</label><input value="{{ current_user.username }}" class="input bg-gray-50" disabled></div>
+                <div><label class="text-sm font-semibold text-gray-700 mb-1 block">邮箱</label><input value="{{ current_user.email }}" class="input bg-gray-50" disabled></div>
+                <div><label class="text-sm font-semibold text-gray-700 mb-1 block">手机号</label><input name="phone" value="{{ current_user.phone or '' }}" class="input" placeholder="选填"></div>
+                <div><label class="text-sm font-semibold text-gray-700 mb-1 block">单位名称</label><input name="company" value="{{ current_user.company or '' }}" class="input" placeholder="选填"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">保存修改</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

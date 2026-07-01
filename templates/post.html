@@ -1,0 +1,39 @@
+{% extends "base.html" %}{% block title %}{{ post.title }} - TurfPro{% endblock %}{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-6 reveal">
+    <nav class="text-sm text-gray-400 mb-3"><a href="/forum" class="hover:text-emerald-600">社区</a> / <span class="text-gray-600">{{ post.title|truncate(25) }}</span></nav>
+    <div class="card p-8 mb-3">
+        <div class="flex flex-wrap items-center gap-2 text-sm text-gray-500 mb-4">
+            <span class="badge bg-emerald-100 text-emerald-800">{{ post.category.icon }} {{ post.category.name }}</span>
+            {% if post.is_pinned %}<span class="badge bg-amber-100 text-amber-700">📌 置顶</span>{% endif %}
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ post.title }}</h1>
+        <div class="flex flex-wrap items-center gap-4 text-sm text-gray-400 mb-3 pb-6 border-b border-gray-100">
+            <span class="font-medium text-gray-700">✍️ {{ post.author.username }}</span>
+            <span>📅 {{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+            <span>👁️ {{ post.views }} 次阅读</span>
+            <span>💬 {{ replies|length }} 条回复</span>
+        </div>
+        <div class="text-gray-700 leading-relaxed whitespace-pre-wrap">{{ post.content }}</div>
+    </div>
+    <div class="card p-8">
+        <h2 class="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2">💬 回复 <span class="badge bg-gray-100 text-gray-600">{{ replies|length }}</span></h2>
+        <div class="space-y-3 mb-4">
+            {% for reply in replies %}
+            <div class="border-b border-gray-50 pb-4 last:border-0">
+                <div class="flex items-center gap-2 text-sm text-gray-400 mb-2">
+                    <span class="font-medium text-gray-700">{{ reply.user.username }}</span>
+                    <span>{{ reply.created_at.strftime('%m-%d %H:%M') }}</span>
+                </div>
+                <p class="text-gray-700 whitespace-pre-wrap text-sm">{{ reply.content }}</p>
+            </div>
+            {% else %}<p class="text-gray-400 text-center py-8">还没有回复，来发表第一条吧</p>{% endfor %}
+        </div>
+        {% if current_user.is_authenticated %}
+        <form method="POST" action="/post/{{ post.id }}/reply" class="space-y-3">
+            <textarea name="content" rows="3" class="input" placeholder="写下你的回复..." required></textarea>
+            <button type="submit" class="btn btn-primary">发表回复</button>
+        </form>
+        {% else %}<p class="text-center text-sm text-gray-400 py-4">需要<a href="/login" class="text-emerald-600 font-semibold">登录</a>后才能回复</p>{% endif %}
+    </div>
+</div>
+{% endblock %}

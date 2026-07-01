@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% block content %}
+
+<section style="background:#14171f">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+        <div class="max-w-3xl reveal">
+            <div class="eyebrow mb-4" style="color:#3ab564"><span>●</span><span>NEW POST</span></div>
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-5">发布新帖</h1>
+            <p class="text-slate-400 text-base lg:text-lg max-w-xl leading-relaxed">分享你的经验，提出你的问题——与全国同行交流。</p>
+        </div>
+    </div>
+</section>
+
+<div class="max-w-3xl mx-auto px-4 py-8 reveal">
+    <form method="POST" class="card p-8 space-y-5">
+        <div><label class="text-sm font-semibold text-gray-700 mb-1.5 block">标题</label><input name="title" class="input" placeholder="用一句话说清问题" required></div>
+        <div><label class="text-sm font-semibold text-gray-700 mb-1.5 block">分类</label><select name="category_id" class="input">{% for c in categories %}<option value="{{ c.id }}">{{ c.icon }} {{ c.name }}</option>{% endfor %}</select></div>
+        <div><label class="text-sm font-semibold text-gray-700 mb-1.5 block">内容</label><textarea name="content" rows="12" class="input" placeholder="详细描述你的问题、分享你的经验……" required></textarea></div>
+        <button type="submit" class="btn btn-primary w-full justify-center">发布帖子</button>
+    </form>
+</div>
+{% endblock %}

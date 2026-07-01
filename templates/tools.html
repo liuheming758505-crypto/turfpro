@@ -1,0 +1,57 @@
+{% extends "base.html" %}{% block content %}
+
+<section style="background:#14171f">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+        <div class="max-w-3xl reveal">
+            <div class="eyebrow mb-4" style="color:#3ab564"><span>●</span><span>TOOLS</span></div>
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-5">专业工具</h1>
+            <p class="text-slate-400 text-base lg:text-lg max-w-xl leading-relaxed">精准计算 · 科学养护 · 数据驱动决策。</p>
+        </div>
+    </div>
+</section>
+
+<section class="max-w-6xl mx-auto px-4 py-8">
+    <div class="grid md:grid-cols-2 gap-4">
+        <!-- 播种量计算器 -->
+        <div class="card p-8 reveal">
+            <h2 class="font-bold text-xl mb-2">🌾 播种量计算器</h2>
+            <p class="text-sm text-gray-500 mb-3">根据场地面积和草种类型计算所需种子量</p>
+            <div class="space-y-4">
+                <div><label class="text-sm text-gray-600 mb-1 block">场地面积（㎡）</label><input id="seedArea" type="number" class="input" placeholder="如：5000"></div>
+                <div><label class="text-sm text-gray-600 mb-1 block">草种类型</label><select id="grassType" class="input"><option value="百慕大">百慕大（25㎡/kg）</option><option value="黑麦草">黑麦草（30㎡/kg）</option><option value="本特草">本特草（15㎡/kg）</option><option value="结缕草">结缕草（35㎡/kg）</option><option value="高羊茅">高羊茅（40㎡/kg）</option></select></div>
+                <button onclick="calcSeed()" class="btn btn-primary w-full justify-center">计算</button>
+                <div id="seedResult" class="mt-4 p-4 bg-emerald-50 rounded-xl hidden text-sm"></div>
+            </div>
+        </div>
+        <!-- 施肥量计算器 -->
+        <div class="card p-8 reveal">
+            <h2 class="font-bold text-xl mb-2">🧪 施肥量计算器</h2>
+            <p class="text-sm text-gray-500 mb-3">根据场地面积和目标施氮量计算所需肥料</p>
+            <div class="space-y-4">
+                <div><label class="text-sm text-gray-600 mb-1 block">场地面积（㎡）</label><input id="fertArea" type="number" class="input" placeholder="如：5000"></div>
+                <div><label class="text-sm text-gray-600 mb-1 block">目标施氮量（g/㎡）</label><input id="nNeed" type="number" class="input" value="20" placeholder="20"></div>
+                <div><label class="text-sm text-gray-600 mb-1 block">肥料NPK配比</label><select id="npk" class="input"><option value="20-5-10">20-5-10（通用）</option><option value="15-5-15">15-5-15（春秋）</option><option value="30-0-10">30-0-10（高氮）</option><option value="10-5-20">10-5-20（高钾）</option></select></div>
+                <button onclick="calcFert()" class="btn btn-primary w-full justify-center">计算</button>
+                <div id="fertResult" class="mt-4 p-4 bg-emerald-50 rounded-xl hidden text-sm"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+function calcSeed(){
+    const area=parseFloat(document.getElementById('seedArea').value);const grass=document.getElementById('grassType').value;
+    if(!area||area<=0){document.getElementById('seedResult').innerHTML='请输入有效面积';document.getElementById('seedResult').classList.remove('hidden');return}
+    const rates={'百慕大':25,'黑麦草':30,'本特草':15,'结缕草':35,'高羊茅':40};
+    const seed=Math.round(area/rates[grass]*10)/10;
+    document.getElementById('seedResult').innerHTML=`<span class="font-bold text-emerald-700">需种子 ${seed} kg</span><br><span class="text-gray-500 text-xs">建议多备 10% 损耗：${Math.round(seed*1.1*10)/10} kg</span>`;
+    document.getElementById('seedResult').classList.remove('hidden');
+}
+function calcFert(){
+    const area=parseFloat(document.getElementById('fertArea').value);const n=parseFloat(document.getElementById('nNeed').value);const npk=document.getElementById('npk').value;
+    if(!area||area<=0){document.getElementById('fertResult').innerHTML='请输入有效面积';document.getElementById('fertResult').classList.remove('hidden');return}
+    const nPct=parseInt(npk.split('-')[0])/100;const totalN=area*n/1000;const fert=Math.round(totalN/nPct*10)/10;
+    document.getElementById('fertResult').innerHTML=`<span class="font-bold text-emerald-700">需肥料 ${fert} kg</span><br><span class="text-gray-500 text-xs">可提供总氮量 ${totalN} kg</span>`;
+    document.getElementById('fertResult').classList.remove('hidden');
+}
+</script>
+{% endblock %}
