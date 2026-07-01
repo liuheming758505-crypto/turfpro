@@ -111,7 +111,10 @@ def site_settings():
 @admin.route('/articles')
 @admin_required
 def articles():
-    items = Post.query.filter_by(is_article=True).order_by(Post.created_at.desc()).all()
+    q = request.args.get('q', '').strip()
+    query = Post.query.filter_by(is_article=True)
+    if q: query = query.filter(Post.title.contains(q))
+    items = query.order_by(Post.created_at.desc()).all()
     return render_template('admin/articles.html', items=items)
 
 @admin.route('/articles/edit', methods=['GET','POST'])
