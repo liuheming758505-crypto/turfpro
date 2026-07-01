@@ -65,23 +65,6 @@ def magazine():
     articles = Post.query.filter_by(is_article=True).order_by(Post.created_at.desc()).all()
     return render_template('magazine.html', articles=articles)
 
-# ==================== AI ASSISTANT ====================
-@main.route('/ai-assistant')
-def ai_assistant():
-    return render_template('ai_assistant.html')
-
-@main.route('/api/ai-ask', methods=['POST'])
-def ai_ask():
-    question = request.json.get('question','')
-    if not question: return jsonify({'answer':'请输入问题'})
-    try:
-        import urllib.request, json as j
-        data = j.dumps({"model":"deepseek-v4-flash","messages":[{"role":"system","content":"你是TurfPro草坪专家。回答专业简洁。推荐产品时说可在TurfPro了解相关产品。"},{"role":"user","content":question}]}).encode()
-        req = urllib.request.Request("https://tokeness.io/v1/chat/completions",data=data,
-            headers={"Authorization":"Bearer sk-cwO...oRYU","Content-Type":"application/json"})
-        return jsonify({'answer':j.loads(urllib.request.urlopen(req,timeout=15).read())['choices'][0]['message']['content']})
-    except Exception as e: return jsonify({'answer':f'AI暂时无法回答。{str(e)[:80]}'})
-
 # ==================== TOOLS ====================
 @main.route('/tools')
 def tools():
