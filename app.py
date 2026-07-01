@@ -23,6 +23,9 @@ def create_app():
     from routes import main
     app.register_blueprint(main)
 
+    from admin import admin as admin_bp
+    app.register_blueprint(admin_bp)
+
     with app.app_context():
         db.create_all()
         try:
@@ -32,4 +35,5 @@ def create_app():
 
     return app
 
-# 部署用：Gunicorn 加载此模块后自动调用 create_app()
+if __name__ == '__main__':
+    create_app().run(host='0.0.0.0', port=5001)

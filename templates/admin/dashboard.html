@@ -1,0 +1,33 @@
+{% extends "base.html" %}{% block content %}
+<section style="background:#14171f">
+  <div class="max-w-7xl mx-auto px-6 py-10">
+    <div class="max-w-3xl">
+      <div class="eyebrow mb-3" style="color:#3ab564"><span>●</span><span>ADMIN · 管理后台</span></div>
+      <h1 class="text-3xl lg:text-4xl font-extrabold text-white tracking-tight">仪表盘</h1>
+      <p class="text-slate-400 text-sm mt-2">欢迎回来，{{ current_user.username }}</p>
+    </div>
+  </div>
+</section>
+<div class="max-w-7xl mx-auto px-6 py-10">
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
+    <div class="card p-5 text-center"><div class="font-mono text-[10px] text-slate-500 uppercase mb-1">用户</div><div class="text-3xl font-extrabold text-ink">{{ stats.users }}</div></div>
+    <div class="card p-5 text-center"><div class="font-mono text-[10px] text-slate-500 uppercase mb-1">帖子</div><div class="text-3xl font-extrabold text-ink">{{ stats.posts }}</div></div>
+    <div class="card p-5 text-center"><div class="font-mono text-[10px] text-slate-500 uppercase mb-1">文章</div><div class="text-3xl font-extrabold text-ink">{{ stats.articles }}</div></div>
+    <div class="card p-5 text-center"><div class="font-mono text-[10px] text-slate-500 uppercase mb-1">资讯</div><div class="text-3xl font-extrabold text-ink">{{ stats.news }}</div></div>
+    <div class="card p-5 text-center"><div class="font-mono text-[10px] text-slate-500 uppercase mb-1">诊断条目</div><div class="text-3xl font-extrabold text-ink">{{ stats.problems }}</div></div>
+    <div class="card p-5 text-center"><div class="font-mono text-[10px] text-slate-500 uppercase mb-1">回复</div><div class="text-3xl font-extrabold text-ink">{{ stats.replies }}</div></div>
+  </div>
+  <div class="grid md:grid-cols-3 gap-4 mb-10">
+    <a href="/admin/articles" class="card p-6 group hover:border-ink"><div class="eyebrow mb-2"><span>●</span><span>ARTICLES</span></div><h3 class="font-bold group-hover:text-ink">文章管理</h3><p class="text-xs text-slate-500 mt-1">{{ stats.articles }} 篇技术文章</p></a>
+    <a href="/admin/news" class="card p-6 group hover:border-ink"><div class="eyebrow mb-2"><span>●</span><span>NEWS</span></div><h3 class="font-bold group-hover:text-ink">资讯管理</h3><p class="text-xs text-slate-500 mt-1">{{ stats.news }} 条行业资讯</p></a>
+    <a href="/admin/diagnose" class="card p-6 group hover:border-ink"><div class="eyebrow mb-2"><span>●</span><span>DIAGNOSE</span></div><h3 class="font-bold group-hover:text-ink">诊断库管理</h3><p class="text-xs text-slate-500 mt-1">{{ stats.problems }} 条诊断条目</p></a>
+    <a href="/admin/forum" class="card p-6 group hover:border-ink"><div class="eyebrow mb-2"><span>●</span><span>FORUM</span></div><h3 class="font-bold group-hover:text-ink">论坛管理</h3><p class="text-xs text-slate-500 mt-1">{{ stats.posts - stats.articles }} 个帖子</p></a>
+    <a href="/admin/users" class="card p-6 group hover:border-ink"><div class="eyebrow mb-2"><span>●</span><span>USERS</span></div><h3 class="font-bold group-hover:text-ink">用户管理</h3><p class="text-xs text-slate-500 mt-1">{{ stats.users }} 个注册用户</p></a>
+  </div>
+  <div class="card p-6"><h3 class="font-bold mb-4">最新注册用户</h3>
+    <table class="w-full text-sm"><thead><tr class="font-mono text-[10px] text-slate-500 uppercase text-left"><th class="pb-2">用户名</th><th class="pb-2">邮箱</th><th class="pb-2">注册时间</th></tr></thead><tbody>
+    {% for u in latest_users %}<tr class="border-t" style="border-color:var(--line)"><td class="py-2 font-medium">{{ u.username }}</td><td class="py-2 text-slate-500">{{ u.email }}</td><td class="py-2 text-slate-500 font-mono text-[11px]">{{ u.created_at.strftime('%Y-%m-%d %H:%M') }}</td></tr>
+    {% endfor %}</tbody></table>
+  </div>
+</div>
+{% endblock %}

@@ -258,6 +258,12 @@ def seed_data():
 
     seed_problems()
 
+    # 第一个注册用户自动设为管理员
+    first = User.query.order_by(User.id).first()
+    if first and not first.is_admin:
+        first.is_admin = True
+        db.session.commit()
+
 
 def seed_problems():
     """草坪病虫草害诊断库种子数据"""
