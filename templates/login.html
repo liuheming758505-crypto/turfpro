@@ -1,5 +1,4 @@
 {% extends "base.html" %}{% block content %}
-<!-- Login -->
 <section class="min-h-[80vh] flex items-center bg-gray-50">
     <div class="max-w-md mx-auto px-4 w-full">
         <div class="card p-8 reveal">
@@ -10,7 +9,12 @@
             </div>
             <form method="POST" class="space-y-4">
                 <input type="text" name="username" placeholder="用户名" class="input" required>
-                <input type="password" name="password" placeholder="密码" class="input" required>
+                <div class="relative">
+                    <input type="password" name="password" id="login-pw" placeholder="密码" class="input pr-10" required>
+                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-ink" onclick="var i=document.getElementById('login-pw');i.type=i.type==='password'?'text':'password'">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
                 <button type="submit" class="btn btn-primary w-full justify-center">登录</button>
             </form>
             <p class="text-center text-sm text-gray-500 mt-6">还没有账号？<a href="/register" class="text-emerald-600 font-semibold hover:underline">立即注册</a></p>
