@@ -264,6 +264,17 @@ def seed_data():
         first.is_admin = True
         db.session.commit()
 
+    # 确保管理员账号 herming 存在（部署后数据库重置时自动创建）
+    admin_user = User.query.filter_by(username='herming').first()
+    if not admin_user:
+        admin_user = User(username='herming', email='414656191@qq.com', is_admin=True)
+        admin_user.set_password('admin123')
+        db.session.add(admin_user)
+        db.session.commit()
+    elif not admin_user.is_admin:
+        admin_user.is_admin = True
+        db.session.commit()
+
 
 def seed_problems():
     """草坪病虫草害诊断库种子数据"""
