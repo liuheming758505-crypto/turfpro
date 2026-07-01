@@ -1,17 +1,66 @@
 {% extends "base.html" %}{% block content %}
 <section style="background:#14171f"><div class="max-w-7xl mx-auto px-6 py-8"><div class="max-w-3xl"><a href="/admin" class="font-mono text-[11px] text-slate-400 hover:text-white transition">← 返回后台</a><h1 class="text-3xl font-extrabold text-white tracking-tight mt-2">站点设置</h1></div></div></section>
-<div class="max-w-4xl mx-auto px-6 py-6">
-  <form method="POST" enctype="multipart/form-data" class="card p-8 space-y-5">
-    <div class="grid grid-cols-2 gap-4">
-      <div><label class="text-sm font-semibold text-gray-700 mb-1.5 block">站点名称</label><input name="site_name" value="{{ settings.site_name }}" class="input"></div>
-      <div><label class="text-sm font-semibold text-gray-700 mb-1.5 block">Logo 文字</label><input name="logo_text" value="{{ settings.logo_text }}" class="input"></div>
+<div class="max-w-5xl mx-auto px-6 py-6 space-y-6">
+  <form method="POST" enctype="multipart/form-data" class="space-y-6">
+
+    <!-- 基本设置 -->
+    <div class="card p-8">
+      <h2 class="font-bold text-lg mb-5">基本设置</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div><label class="text-sm font-semibold text-gray-700 mb-1.5 block">站点名称</label><input name="site_name" value="{{ settings.site_name }}" class="input"></div>
+        <div><label class="text-sm font-semibold text-gray-700 mb-1.5 block">Logo 文字</label><input name="logo_text" value="{{ settings.logo_text }}" class="input"></div>
+      </div>
+      <div class="mt-4"><label class="text-sm font-semibold text-gray-700 mb-1.5 block">上传 Logo 图片</label><input type="file" name="logo_file" accept="image/*" class="input"></div>
     </div>
-    <div><label class="text-sm font-semibold text-gray-700 mb-1.5 block">首页主标题</label><input name="hero_title" value="{{ settings.hero_title }}" class="input"></div>
-    <div><label class="text-sm font-semibold text-gray-700 mb-1.5 block">首页副标题</label><textarea name="hero_subtitle" rows="2" class="input">{{ settings.hero_subtitle }}</textarea></div>
-    <div><label class="text-sm font-semibold text-gray-700 mb-1.5 block">首页背景图 URL</label><input name="hero_image" value="{{ settings.hero_image }}" class="input" placeholder="https://images.unsplash.com/photo-...">
-      {% if settings.hero_image %}<img src="{{ settings.hero_image }}" class="mt-2 h-24 rounded object-cover">{% endif %}
+
+    <!-- 导航管理 -->
+    <div class="card p-8">
+      <h2 class="font-bold text-lg mb-5">导航菜单管理 <span class="font-mono text-[10px] text-slate-400 font-normal">显示/隐藏/新增/排序</span></h2>
+      <div id="nav-list" class="space-y-2">
+        {% for item in settings.nav_items %}
+        <div class="nav-row flex items-center gap-3 p-3 border" style="border-color:var(--line)">
+          <span class="cursor-move text-slate-400 font-mono text-sm">⠿</span>
+          <input name="nav_label[]" value="{{ item.label }}" class="input flex-1" placeholder="名称" style="padding:.4rem .6rem">
+          <input name="nav_url[]" value="{{ item.url }}" class="input flex-1" placeholder="/路径" style="padding:.4rem .6rem">
+          <label class="flex items-center gap-1.5 text-sm text-slate-600 shrink-0"><input type="checkbox" name="nav_visible[]" value="1" {% if item.visible %}checked{% endif %} class="w-4 h-4"> 显示</label>
+          <button type="button" onclick="this.parentElement.remove()" class="text-xs text-red-500 hover:underline shrink-0">删除</button>
+        </div>
+        {% endfor %}
+      </div>
+      <button type="button" onclick="addNavRow()" class="btn text-xs !px-4 !py-2 mt-3" style="background:#3ab564;color:#06230f">＋ 新增导航项</button>
     </div>
-    <div><label class="text-sm font-semibold text-gray-700 mb-1.5 block">上传 Logo 图片</label><input type="file" name="logo_file" accept="image/*" class="input"></div>
-    <button type="submit" class="btn btn-ink">保存设置</button>
+
+    <!-- 每页 Hero 设置 -->
+    <div class="card p-8">
+      <h2 class="font-bold text-lg mb-5">每页标题 & 背景图设置</h2>
+      <div class="space-y-6">
+        {% for key, hero in [('home','首页'),('diagnose','诊断库'),('forum','社区'),('magazine','杂志'),('news','资讯'),('tools','工具'),('about','关于'),('contact','联系我们')] %}
+        <div class="border p-5" style="border-color:var(--line)">
+          <p class="font-mono text-[11px] text-slate-500 uppercase mb-3">{{ key | upper }} · {{ hero }}</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <input name="hero_{{ key }}_title" value="{{ settings.page_heroes[key].title if settings.page_heroes.get(key) else '' }}" class="input" placeholder="标题">
+            <input name="hero_{{ key }}_subtitle" value="{{ settings.page_heroes[key].subtitle if settings.page_heroes.get(key) else '' }}" class="input" placeholder="副标题">
+            <input name="hero_{{ key }}_image" value="{{ settings.page_heroes[key].image if settings.page_heroes.get(key) else '' }}" class="input" placeholder="背景图 URL">
+          </div>
+          {% if settings.page_heroes.get(key) and settings.page_heroes[key].image %}
+          <img src="{{ settings.page_heroes[key].image }}" class="mt-2 h-16 rounded object-cover">
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-ink w-full justify-center">保存所有设置</button>
   </form>
-</div>{% endblock %}
+</div>
+
+<script>
+function addNavRow() {
+  var div = document.createElement('div');
+  div.className = 'nav-row flex items-center gap-3 p-3 border';
+  div.style.borderColor = 'var(--line)';
+  div.innerHTML = '<span class="text-slate-400 font-mono text-sm">⠿</span><input name="nav_label[]" class="input flex-1" placeholder="名称" style="padding:.4rem .6rem"><input name="nav_url[]" class="input flex-1" placeholder="/路径" style="padding:.4rem .6rem"><label class="flex items-center gap-1.5 text-sm text-slate-600 shrink-0"><input type="checkbox" name="nav_visible[]" value="1" checked class="w-4 h-4"> 显示</label><button type="button" onclick="this.parentElement.remove()" class="text-xs text-red-500 hover:underline shrink-0">删除</button>';
+  document.getElementById('nav-list').appendChild(div);
+}
+</script>
+{% endblock %}

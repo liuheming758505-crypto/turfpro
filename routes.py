@@ -158,4 +158,12 @@ def problem_detail(slug):
 
 @main.context_processor
 def inject_globals():
-    return dict(categories=Category.query.order_by(Category.display_order).all(), current_year=datetime.now().year)
+    from admin import load_settings
+    settings = load_settings()
+    return dict(
+        categories=Category.query.order_by(Category.display_order).all(),
+        current_year=datetime.now().year,
+        site_settings=settings,
+        nav_items=[n for n in settings.get('nav_items',[]) if n.get('visible')],
+        page_heroes=settings.get('page_heroes',{}),
+    )

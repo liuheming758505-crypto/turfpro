@@ -31,10 +31,27 @@ def load_settings():
             return json.load(f)
     return {
         'site_name': 'XFieldMate',
-        'hero_title': '专业草坪养护平台',
-        'hero_subtitle': '为中国草坪管理者打造的专业平台',
-        'hero_image': 'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=1600',
         'logo_text': 'XFieldMate',
+        'nav_items': [
+            {'label':'首页','url':'/','order':1,'visible':True},
+            {'label':'诊断库','url':'/diagnose','order':2,'visible':True},
+            {'label':'杂志','url':'/magazine','order':3,'visible':True},
+            {'label':'社区','url':'/forum','order':4,'visible':True},
+            {'label':'资讯','url':'/news','order':5,'visible':True},
+            {'label':'工具','url':'/tools','order':6,'visible':True},
+            {'label':'关于','url':'/about','order':7,'visible':False},
+            {'label':'联系我们','url':'/contact','order':8,'visible':False},
+        ],
+        'page_heroes': {
+            'home': {'title':'专业草坪养护平台','subtitle':'为中国草坪管理者打造的专业平台','image':'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=1600'},
+            'diagnose': {'title':'识别每一处病害','subtitle':'对照症状快速识别草坪病害、虫害与杂草','image':''},
+            'forum': {'title':'技术社区','subtitle':'与全国草坪从业者交流养护技术、场地难题与实战经验','image':''},
+            'magazine': {'title':'技术杂志','subtitle':'深度技术长文 · 实战案例 · 行业专家的一线经验','image':''},
+            'news': {'title':'行业资讯','subtitle':'草坪养护行业最新动态、技术前沿与政策解读','image':''},
+            'tools': {'title':'专业工具','subtitle':'精准计算 · 科学养护 · 数据驱动决策','image':''},
+            'about': {'title':'关于 XFieldMate','subtitle':'融合国际经验与中国实践','image':''},
+            'contact': {'title':'联系我们','subtitle':'合作、咨询、建议——期待您的来信','image':''},
+        },
     }
 
 def save_settings(data):
@@ -59,10 +76,26 @@ def site_settings():
     settings = load_settings()
     if request.method == 'POST':
         settings['site_name'] = request.form.get('site_name', 'XFieldMate')
-        settings['hero_title'] = request.form.get('hero_title', '')
-        settings['hero_subtitle'] = request.form.get('hero_subtitle', '')
-        settings['hero_image'] = request.form.get('hero_image', '')
         settings['logo_text'] = request.form.get('logo_text', 'XFieldMate')
+        # Update page heroes
+        page_keys = ['home','diagnose','forum','magazine','news','tools','about','contact']
+        for key in page_keys:
+            h = settings['page_heroes'].get(key, {})
+            h['title'] = request.form.get(f'hero_{key}_title', '')
+            h['subtitle'] = request.form.get(f'hero_{key}_subtitle', '')
+            h['image'] = request.form.get(f'hero_{key}_image', '')
+            settings['page_heroes'][key] = h
+        # Update nav items
+        nav_labels = request.form.getlist('nav_label[]')
+        nav_urls = request.form.getlist('nav_url[]')
+        nav_vis = request.form.getlist('nav_visible[]')
+        new_nav = []
+        for i in range(len(nav_labels)):
+            new_nav.append({
+                'label': nav_labels[i], 'url': nav_urls[i],
+                'order': i+1, 'visible': nav_vis[i] == '1'
+            })
+        settings['nav_items'] = new_nav
         # Upload logo
         if 'logo_file' in request.files and request.files['logo_file'].filename:
             f = request.files['logo_file']

@@ -108,12 +108,9 @@
                     <span class="font-bold text-base tracking-tight">XFieldMate</span>
                 </a>
                 <div class="hidden md:flex items-center space-x-6">
-                    <a href="/" class="text-[13px] font-medium text-slate-600 hover:text-ink">首页</a>
-                    <a href="/diagnose" class="text-[13px] font-medium text-slate-600 hover:text-ink">诊断库</a>
-                    <a href="/magazine" class="text-[13px] font-medium text-slate-600 hover:text-ink">杂志</a>
-                    <a href="/forum" class="text-[13px] font-medium text-slate-600 hover:text-ink">社区</a>
-                    <a href="/news" class="text-[13px] font-medium text-slate-600 hover:text-ink">资讯</a>
-                    <a href="/tools" class="text-[13px] font-medium text-slate-600 hover:text-ink">工具</a>
+                    {% for item in nav_items %}
+                    <a href="{{ item.url }}" class="text-[13px] font-medium text-slate-600 hover:text-ink">{{ item.label }}</a>
+                    {% endfor %}
                     <span class="w-px h-4 bg-slate-200"></span>
                     {% if current_user.is_authenticated %}
                     <a href="/profile" class="text-[13px] font-semibold text-ink">{{ current_user.username }}</a>
