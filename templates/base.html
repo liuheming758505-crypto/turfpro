@@ -125,11 +125,12 @@
     </nav>
 
     {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}
-    <div class="fixed top-20 left-1/2 -translate-x-1/2 z-50 space-y-2">
+    <div id="flash-msg" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 space-y-2">
         {% for cat, msg in messages %}
         <div class="px-5 py-2.5 shadow-lg text-white text-sm font-medium {% if cat=='error' %}bg-red-500{% else %}bg-ink{% endif %}" style="border-radius:3px">{{ msg }}</div>
         {% endfor %}
     </div>
+    <script>setTimeout(function(){var f=document.getElementById('flash-msg');if(f)f.style.display='none'},2500)</script>
     {% endif %}{% endwith %}
 
     {% block content %}{% endblock %}
