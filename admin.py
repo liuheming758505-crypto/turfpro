@@ -14,8 +14,10 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def admin_required(f):
     @wraps(f)
-    @login_required
     def decorated(*args, **kwargs):
+        if not current_user.is_authenticated:
+            flash('请先登录', 'error')
+            return redirect(url_for('main.login', next=request.url))
         if not current_user.is_admin:
             flash('无权访问管理后台', 'error')
             return redirect(url_for('main.index'))

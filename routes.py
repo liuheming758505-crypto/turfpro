@@ -98,9 +98,12 @@ def fertilizer_calculator():
 def login():
     if request.method=='POST':
         user=User.query.filter_by(username=request.form.get('username')).first()
-        if user and user.check_password(request.form.get('password')): login_user(user); flash('登录成功','success'); return redirect(url_for('main.index'))
+        if user and user.check_password(request.form.get('password')):
+            login_user(user); flash('登录成功','success')
+            next_url = request.args.get('next') or url_for('main.index')
+            return redirect(next_url)
         flash('用户名或密码错误','error')
-    return render_template('login.html')
+    return render_template('login.html', next=request.args.get('next',''))
 
 @main.route('/register', methods=['GET','POST'])
 def register():
