@@ -123,6 +123,15 @@ class Post(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     replies = db.relationship('Reply', backref='post', lazy=True, cascade='all,delete-orphan')
 
+    @property
+    def last_reply(self):
+        return Reply.query.filter_by(post_id=self.id).order_by(Reply.created_at.desc()).first()
+
+    @property
+    def last_active(self):
+        lr = self.last_reply
+        return lr.created_at if lr else self.created_at
+
 class Reply(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
@@ -183,8 +192,24 @@ class UsedMachine(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
+def ensure_admin():
+    """确保管理员账号 herming 始终存在且可登录（与其它种子数据解耦，每次启动都执行）"""
+    admin_user = User.query.filter_by(username='herming').first()
+    if not admin_user:
+        admin_user = User(username='herming', email='414656191@qq.com', is_admin=True)
+        admin_user.set_password('admin123')
+        db.session.add(admin_user)
+        db.session.commit()
+    else:
+        # 已存在则强制修正管理员权限并重置密码，杜绝密码漂移导致登录失败
+        admin_user.is_admin = True
+        admin_user.set_password('admin123')
+        db.session.commit()
+
+
 def seed_data():
     """Initial data"""
+    ensure_admin()  # 无论库是否已初始化，都先保证管理员可用
     if Category.query.first(): return
     # Main categories
     cats = [
@@ -262,17 +287,6 @@ def seed_data():
     first = User.query.order_by(User.id).first()
     if first and not first.is_admin:
         first.is_admin = True
-        db.session.commit()
-
-    # 确保管理员账号 herming 存在（部署后数据库重置时自动创建）
-    admin_user = User.query.filter_by(username='herming').first()
-    if not admin_user:
-        admin_user = User(username='herming', email='414656191@qq.com', is_admin=True)
-        admin_user.set_password('admin123')
-        db.session.add(admin_user)
-        db.session.commit()
-    elif not admin_user.is_admin:
-        admin_user.is_admin = True
         db.session.commit()
 
 

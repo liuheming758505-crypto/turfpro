@@ -11,20 +11,29 @@ def index():
     articles = Post.query.filter_by(is_article=True).order_by(Post.created_at.desc()).limit(3).all()
     news_items = NewsArticle.query.filter_by(is_published=True).order_by(NewsArticle.published_at.desc()).limit(3).all()
     categories = Category.query.order_by(Category.display_order).all()
-    return render_template('index.html', articles=articles, news=news_items, categories=categories)
+    # 首页社区活力模块：最新讨论帖（非文章）
+    hot_posts = Post.query.filter_by(is_article=False).order_by(Post.created_at.desc()).limit(5).all()
+    post_count = Post.query.filter_by(is_article=False).count()
+    diagnose_count = TurfProblem.query.count()
+    return render_template('index.html', articles=articles, news=news_items, categories=categories,
+                          hot_posts=hot_posts, post_count=post_count, diagnose_count=diagnose_count)
 
 # ==================== FORUM ====================
 @main.route('/forum')
 def forum():
     cat_slug = request.args.get('category'); sort = request.args.get('sort','latest')
+    q = (request.args.get('q') or '').strip()
     if cat_slug:
         cat = Category.query.filter_by(slug=cat_slug).first_or_404()
         posts = Post.query.filter_by(category_id=cat.id)
     else: cat = None; posts = Post.query
-    if sort == 'popular': posts = posts.order_by(Post.views.desc())
-    else: posts = posts.order_by(Post.created_at.desc())
+    if q:
+        posts = posts.filter(Post.title.contains(q) | Post.content.contains(q))
+    # 置顶帖始终排最前
+    if sort == 'popular': posts = posts.order_by(Post.is_pinned.desc(), Post.views.desc())
+    else: posts = posts.order_by(Post.is_pinned.desc(), Post.created_at.desc())
     return render_template('forum.html', posts=posts.all(), categories=Category.query.order_by(Category.display_order).all(),
-                          current_cat=cat, sort=sort)
+                          current_cat=cat, sort=sort, q=q)
 
 @main.route('/post/<int:id>')
 def post_detail(id):

@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}论坛 - XFieldMate{% endblock %}
+{% block title %}技术社区 - XFieldMate{% endblock %}
 {% block content %}
 <section style="background:#14171f">
-    <div class="max-w-7xl mx-auto px-6 py-20">
+    <div class="max-w-7xl mx-auto px-6 py-16 lg:py-20">
         <div class="max-w-3xl reveal">
             <div class="eyebrow mb-4" style="color:#3ab564"><span>●</span><span>COMMUNITY · {{ current_cat.name if current_cat else '全部讨论' }}</span></div>
             <h1 class="text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-5">
@@ -11,50 +11,77 @@
             <p class="text-slate-400 text-base lg:text-lg max-w-xl leading-relaxed mb-8">
                 {{ current_cat.description if current_cat else '与全国草坪从业者交流养护技术、场地难题与实战经验。' }}
             </p>
-            <a href="/post/new" class="btn btn-accent text-sm !px-6 !py-3">＋ 发起讨论</a>
+            <div class="flex flex-wrap items-center gap-3">
+                <a href="/post/new" class="btn btn-accent text-sm !px-6 !py-3">＋ 发起讨论</a>
+                <!-- 搜索框 -->
+                <form action="/forum" method="get" class="flex items-center gap-2">
+                    {% if current_cat %}<input type="hidden" name="category" value="{{ current_cat.slug }}">{% endif %}
+                    <input type="text" name="q" value="{{ q or '' }}" placeholder="搜索帖子标题 / 内容…"
+                           class="text-sm px-4 py-2.5 bg-white/5 text-white border border-white/15 placeholder-slate-500 focus:border-white/40 outline-none w-56" style="border-radius:3px">
+                    <button type="submit" class="btn text-sm !px-4 !py-2.5 bg-white/5 text-white border border-white/15 hover:bg-white/10">搜索</button>
+                </form>
+            </div>
         </div>
     </div>
 </section>
-<div>
+
+<div style="background:#fbfaf8">
     <div class="max-w-7xl mx-auto px-6 py-8">
-        <div class="flex flex-wrap gap-2 mb-4">
+        <!-- 分类标签 -->
+        <div class="flex flex-wrap gap-2 mb-6">
             <a href="/forum" class="px-4 py-2 text-xs font-mono font-medium {% if not current_cat %}bg-ink text-white{% else %}bg-white text-slate-600 border hover:border-ink{% endif %}" style="border-radius:3px">全部</a>
             {% for cat in categories %}
             <a href="/forum?category={{ cat.slug }}" class="px-4 py-2 text-xs font-mono font-medium {% if current_cat and current_cat.id == cat.id %}bg-ink text-white{% else %}bg-white text-slate-600 border hover:border-ink{% endif %}" style="border-radius:3px">{{ cat.icon }} {{ cat.name }}</a>
             {% endfor %}
         </div>
-        <div class="flex justify-between items-center mb-3">
-            <p class="text-gray-500">{{ posts|length }} 个帖子</p>
-            <div class="flex space-x-2">
-                <a href="?sort=latest&category={{ current_cat.slug if current_cat else '' }}" class="px-3 py-1 text-sm rounded-full {% if sort == 'latest' or not sort %}bg-gray-800 text-white{% else %}bg-gray-100 text-gray-600{% endif %}">最新</a>
-                <a href="?sort=popular&category={{ current_cat.slug if current_cat else '' }}" class="px-3 py-1 text-sm rounded-full {% if sort == 'popular' %}bg-gray-800 text-white{% else %}bg-gray-100 text-gray-600{% endif %}">热门</a>
+
+        {% if q %}
+        <div class="mb-4 text-sm text-slate-600">
+            搜索 “<span class="font-semibold text-ink">{{ q }}</span>” — 找到 {{ posts|length }} 条 ·
+            <a href="/forum{% if current_cat %}?category={{ current_cat.slug }}{% endif %}" class="text-grass hover:underline">清除</a>
+        </div>
+        {% endif %}
+
+        <div class="flex justify-between items-center mb-4">
+            <p class="font-mono text-xs text-slate-500">{{ posts|length }} 个帖子</p>
+            <div class="flex gap-2">
+                <a href="?sort=latest{% if current_cat %}&category={{ current_cat.slug }}{% endif %}{% if q %}&q={{ q }}{% endif %}" class="px-3 py-1.5 text-xs font-mono {% if sort == 'latest' or not sort %}bg-ink text-white{% else %}bg-white text-slate-600 border{% endif %}" style="border-radius:3px">最新</a>
+                <a href="?sort=popular{% if current_cat %}&category={{ current_cat.slug }}{% endif %}{% if q %}&q={{ q }}{% endif %}" class="px-3 py-1.5 text-xs font-mono {% if sort == 'popular' %}bg-ink text-white{% else %}bg-white text-slate-600 border{% endif %}" style="border-radius:3px">热门</a>
             </div>
         </div>
-        <div class="space-y-4">
+
+        <!-- 帖子列表 -->
+        <div class="bg-white border" style="border-radius:3px">
             {% for post in posts %}
-            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 card-hover">
-                <div class="flex items-start justify-between">
-                    <div class="flex-1">
-                        <div class="flex items-center space-x-2 mb-2">
-                            <span class="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full font-medium">{{ post.category.icon }} {{ post.category.name }}</span>
-                            {% if post.is_pinned %}<span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">置顶</span>{% endif %}
-                        </div>
-                        <a href="/post/{{ post.id }}" class="text-xl font-bold text-gray-900 hover:text-green-600 mb-2 block">{{ post.title }}</a>
-                        <p class="text-gray-500 mb-3">{{ post.content[:150] }}{% if post.content|length > 150 %}...{% endif %}</p>
-                    </div>
+            <div class="flex items-start gap-4 p-5 {% if not loop.last %}border-b{% endif %} hover:bg-cream transition group">
+                <!-- 头像 -->
+                <div class="w-10 h-10 shrink-0 flex items-center justify-center text-white font-bold text-sm"
+                     style="background:{% if post.is_pinned %}#1f6b3b{% else %}#14171f{% endif %};border-radius:3px">
+                    {{ post.author.username[0]|upper if post.author else '匿' }}
                 </div>
-                <div class="flex items-center space-x-4 text-sm text-gray-400 border-t border-gray-50 pt-3">
-                    <span>{{ post.author.username }}</span>
-                    <span>{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
-                    <span>👁️ {{ post.views }}</span>
-                    <span>💬 {{ post.replies|length }}</span>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center flex-wrap gap-2 mb-1.5">
+                        {% if post.is_pinned %}<span class="badge" style="background:#f7d455;color:#5c4a00">置顶</span>{% endif %}
+                        <span class="badge" style="background:rgba(58,181,100,.12);color:#1f6b3b">{{ post.category.icon }} {{ post.category.name }}</span>
+                    </div>
+                    <a href="/post/{{ post.id }}" class="text-lg font-bold text-ink group-hover:text-grass leading-snug block line-clamp-1">{{ post.title }}</a>
+                    <p class="text-slate-500 text-sm mt-1 line-clamp-1">{{ post.content|truncate(120) }}</p>
+                    <div class="flex items-center flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] text-slate-400 mt-2.5">
+                        <span class="text-slate-600 font-medium">{{ post.author.username if post.author else '匿名' }}</span>
+                        <span>发布 {{ post.created_at.strftime('%Y-%m-%d') }}</span>
+                        <span>👁 {{ post.views }}</span>
+                        <span>💬 {{ post.replies|length }}</span>
+                        {% if post.last_reply %}
+                        <span class="text-grass">最后回复 · {{ post.last_reply.user.username if post.last_reply.user else '匿名' }} · {{ post.last_reply.created_at.strftime('%m-%d %H:%M') }}</span>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
             {% else %}
-            <div class="text-center py-8 text-gray-400">
-                <p class="text-5xl mb-4">📋</p>
-                <p class="text-lg">这个版块还没有帖子</p>
-                <a href="/post/new" class="text-green-600 font-medium mt-2 inline-block">发布第一条 →</a>
+            <div class="text-center py-16 text-slate-400">
+                <p class="text-4xl mb-4">📋</p>
+                <p class="text-base">{% if q %}没有匹配的帖子{% else %}这个版块还没有帖子{% endif %}</p>
+                <a href="/post/new" class="text-grass font-medium mt-3 inline-block">发布第一条 →</a>
             </div>
             {% endfor %}
         </div>
