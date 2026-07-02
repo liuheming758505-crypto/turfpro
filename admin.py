@@ -162,6 +162,13 @@ def toggle_pin(id):
     item.is_pinned = not item.is_pinned; db.session.commit()
     return redirect(url_for('admin.articles'))
 
+@admin.route('/articles/toggle-featured/<int:id>')
+@admin_required
+def toggle_featured(id):
+    item = Post.query.get_or_404(id)
+    item.is_featured = not item.is_featured; db.session.commit()
+    return redirect(url_for('admin.articles'))
+
 # ============ 资讯管理 ============
 @admin.route('/news')
 @admin_required
@@ -302,4 +309,22 @@ def upload_image():
         return jsonify({'error': '不支持的文件格式'})
     filename = secure_filename(f'{datetime.now().strftime("%Y%m%d%H%M%S")}_{f.filename}')
     f.save(os.path.join(UPLOAD_FOLDER, filename))
-    return jsonify({'url': '/static/uploads/' + filename, 'ok': True})
+# ============ AI 助手（智谱 GLM） ============
+@admin.route('/ai')
+@admin_required
+def ai_assistant():
+    return render_template('admin/ai.html')
+
+@admin.route('/api/ai-chat', methods=['POST'])
+@admin_required
+def ai_chat():
+    prompt = request.json.get('prompt', '')
+    mode = request.json.get('mode', 'chat')
+    try:
+        from zhipu import chat, diagnose, generate_article
+        if mode == 'diagnose': result = diagnose(prompt)
+        elif mode == 'article': result = generate_article(prompt)
+        else: result = chat(prompt)
+        return jsonify({'answer': result})
+    except Exception as e:
+        return jsonify({'answer': f'调用失败: {str(e)[:100]}'})

@@ -1,0 +1,57 @@
+{% extends "base.html" %}{% block content %}
+<section style="background:#14171f"><div class="max-w-7xl mx-auto px-6 py-8"><div class="max-w-3xl"><a href="/admin" class="font-mono text-[11px] text-slate-400 hover:text-white transition">← 返回后台</a><h1 class="text-3xl font-extrabold text-white tracking-tight mt-2">智谱 AI 助手</h1></div></div></section>
+
+<div class="max-w-4xl mx-auto px-6 py-6">
+  <div class="grid md:grid-cols-2 gap-4 mb-6">
+    <button onclick="setMode('chat')" id="btn-chat" class="card p-6 text-left group hover:border-ink transition">
+      <div class="eyebrow mb-2"><span>●</span><span>CHAT</span></div>
+      <h3 class="font-bold">自由对话</h3>
+      <p class="text-xs text-slate-500 mt-1">任何草坪养护问题，AI 即时回答</p>
+    </button>
+    <button onclick="setMode('diagnose')" id="btn-diagnose" class="card p-6 text-left group hover:border-ink transition">
+      <div class="eyebrow mb-2"><span>●</span><span>DIAGNOSE</span></div>
+      <h3 class="font-bold">智能诊断</h3>
+      <p class="text-xs text-slate-500 mt-1">描述草坪症状 → AI 给出诊断和防治方案</p>
+    </button>
+    <button onclick="setMode('article')" id="btn-article" class="card p-6 text-left group hover:border-ink transition">
+      <div class="eyebrow mb-2"><span>●</span><span>ARTICLE</span></div>
+      <h3 class="font-bold">文章生成</h3>
+      <p class="text-xs text-slate-500 mt-1">输入主题 → AI 生成技术文章草稿</p>
+    </button>
+  </div>
+
+  <div class="card p-4">
+    <div id="chat-box" class="h-80 overflow-y-auto p-4 space-y-3 bg-sand" style="font-size:14px;line-height:1.6">
+      <div class="text-slate-400 text-sm text-center py-8">选择一个模式，输入问题开始</div>
+    </div>
+    <div class="flex gap-2 mt-3">
+      <input id="prompt-input" class="input flex-1" placeholder="输入你的问题..." onkeydown="if(event.key==='Enter')ask()">
+      <button onclick="ask()" class="btn btn-ink" id="send-btn">发送</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var currentMode = 'chat';
+function setMode(m){currentMode=m;
+  document.getElementById('btn-chat').style.borderColor=m==='chat'?'var(--ink)':'';
+  document.getElementById('btn-diagnose').style.borderColor=m==='diagnose'?'var(--ink)':'';
+  document.getElementById('btn-article').style.borderColor=m==='article'?'var(--ink)':'';
+}
+function ask(){
+  var p=document.getElementById('prompt-input'),text=p.value.trim();if(!text)return;p.value='';
+  var box=document.getElementById('chat-box'),btn=document.getElementById('send-btn');
+  box.innerHTML+='<div class="text-right"><span class="inline-block bg-ink text-white px-4 py-2 rounded text-sm max-w-[80%]">'+text+'</span></div>';
+  box.innerHTML+='<div id="loading" class="text-slate-400 text-sm">⏳ 智谱 AI 正在回复...</div>';
+  box.scrollTop=box.scrollHeight; btn.disabled=true;
+  fetch('/admin/api/ai-chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:text,mode:currentMode})})
+  .then(r=>r.json()).then(d=>{
+    document.getElementById('loading').outerHTML='<div class="text-left"><span class="inline-block bg-white border px-4 py-2 rounded text-sm max-w-[85%] whitespace-pre-wrap">'+d.answer+'</span></div>';
+    box.scrollTop=box.scrollHeight; btn.disabled=false;
+  }).catch(()=>{
+    document.getElementById('loading').outerHTML='<div class="text-red-500 text-sm">请求失败，请重试</div>';
+    btn.disabled=false;
+  });
+}
+</script>
+{% endblock %}
